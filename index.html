@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdeck — Freight Transport Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0d1117;
+  --ink-2: #1c2333;
+  --ink-3: #2d3748;
+  --paper: #f7f4ef;
+  --paper-2: #ede9e0;
+  --paper-3: #e0dbd0;
+  --accent: #e85d24;
+  --accent-2: #f0a500;
+  --blue: #1a5276;
+  --blue-light: #d6eaf8;
+  --teal: #0d7d6a;
+  --teal-light: #d1f2eb;
+  --muted: #6b7280;
+  --line: rgba(13,17,23,0.12);
+  --mono: 'DM Mono', monospace;
+  --display: 'Syne', sans-serif;
+  --serif: 'Fraunces', serif;
+  --r: 6px;
+  --r-lg: 12px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--display);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════ HERO */
+.hero {
+  min-height: 100vh;
+  background: var(--ink);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(232,93,36,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,93,36,0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridPulse 8s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.hero-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.hero-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 3rem;
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.logo {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: white;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.nav-tag {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 3rem;
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.8s ease both;
+}
+
+.eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.7; }
+}
+
+.eyebrow-text {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: white;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.8s ease 0.1s both;
+}
+
+.hero-title em {
+  font-style: italic;
+  font-family: var(--serif);
+  font-weight: 300;
+  color: var(--accent);
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: rgba(255,255,255,0.55);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r);
+  overflow: hidden;
+  animation: fadeUp 0.8s ease 0.3s both;
+}
+
+.stat {
+  padding: 1.25rem 2rem;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.2s;
+}
+
+.stat:last-child { border-right: none; }
+
+.stat:hover { background: rgba(255,255,255,0.04); }
+
+.stat-num {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+
+.hero-scroll {
+  padding: 2rem 3rem;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+
+.scroll-line {
+  width: 40px;
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+}
+
+.scroll-text {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+.scroll-arrow {
+  margin-left: auto;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+.scroll-arrow svg {
+  width: 14px;
+  height: 14px;
+  stroke: rgba(255,255,255,0.4);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════ SECTION WRAPPER */
+.section {
+  padding: 6rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-full {
+  padding: 6rem 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.section-num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  padding-top: 0.4rem;
+  white-space: nowrap;
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.section-title em {
+  font-style: italic;
+  font-family: var(--serif);
+  font-weight: 300;
+  color: var(--accent);
+}
+
+/* ═══════════════════════════════════════ DIVIDER */
+.divider {
+  height: 1px;
+  background: var(--line);
+  margin: 0 3rem;
+}
+
+/* ═══════════════════════════════════════ WHAT IS IT */
+.what-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.what-lead {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.what-lead strong {
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.what-body {
+  font-size: 0.95rem;
+  color: var(--ink-3);
+  line-height: 1.8;
+}
+
+.what-body p + p { margin-top: 1rem; }
+
+/* ═══════════════════════════════════════ HOW IT WORKS */
+.flow-bg {
+  background: var(--ink);
+  padding: 6rem 3rem;
+}
+
+.flow-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.flow-section-num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.flow-title {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: white;
+  margin-bottom: 3.5rem;
+}
+
+.flow-title em {
+  font-style: italic;
+  font-family: var(--serif);
+  font-weight: 300;
+  color: var(--accent);
+}
+
+.flow-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.flow-steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), var(--teal), transparent);
+  opacity: 0.4;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.flow-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+  transition: background 0.3s;
+}
+
+.flow-step:hover .flow-icon {
+  background: rgba(232,93,36,0.15);
+  border-color: rgba(232,93,36,0.4);
+}
+
+.flow-step-num {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.flow-step-title {
+  font-family: var(--display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.flow-step-desc {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════ ARCHITECTURE */
+.arch-diagram {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 3rem;
+  margin-bottom: 3rem;
+}
+
+.arch-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.arch-api-box {
+  background: var(--ink);
+  color: white;
+  border-radius: var(--r);
+  padding: 1.25rem 2.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.arch-api-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.3rem;
+}
+
+.arch-api-name {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.arch-api-sub {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+  margin-top: 0.2rem;
+}
+
+.arch-connectors {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin: 0.5rem 0;
+}
+
+.arch-connector-line {
+  width: 1px;
+  height: 32px;
+  background: var(--line);
+  position: relative;
+}
+
+.arch-connector-line::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--line);
+}
+
+.arch-clients {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.arch-client {
+  border-radius: var(--r);
+  padding: 1.25rem;
+  text-align: center;
+  border: 1px solid;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.arch-client:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.arch-client.php {
+  background: #e8f4fd;
+  border-color: #bee3f8;
+}
+
+.arch-client.js-nuxt {
+  background: #e8fdf4;
+  border-color: #b2f5e6;
+}
+
+.arch-client.js-vue {
+  background: #fef9e7;
+  border-color: #fde68a;
+}
+
+.arch-client.android {
+  background: #fdf2e9;
+  border-color: #fcd9b0;
+}
+
+.arch-client.ios {
+  background: #f3f0fb;
+  border-color: #d8ccf7;
+}
+
+.arch-client-icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.arch-client-name {
+  font-family: var(--display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+  color: var(--ink);
+}
+
+.arch-client-tech {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.arch-services {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.arch-service {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  background: white;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+}
+
+.arch-service-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.arch-service-name {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink-3);
+}
+
+/* ═══════════════════════════════════════ SUBPROJECTS */
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.project-card {
+  border-radius: var(--r-lg);
+  padding: 2rem;
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s;
+  cursor: default;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+}
+
+.project-card.api { background: var(--ink); color: white; }
+.project-card.dashboard { background: #fefce8; }
+.project-card.website { background: #f0fdf4; }
+.project-card.android { background: #fff7ed; }
+.project-card.ios { background: #faf5ff; }
+
+.project-card-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 0 var(--r-lg) 0 100%;
+  opacity: 0.15;
+}
+
+.project-card.api .project-card-accent { background: var(--accent); }
+.project-card.dashboard .project-card-accent { background: #f59e0b; }
+.project-card.website .project-card-accent { background: #10b981; }
+.project-card.android .project-card-accent { background: #f97316; }
+.project-card.ios .project-card-accent { background: #8b5cf6; }
+
+.project-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.project-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.project-lang-tag {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.65rem;
+  border-radius: 100px;
+  font-weight: 500;
+}
+
+.project-card.api .project-lang-tag {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.7);
+}
+
+.project-card.dashboard .project-lang-tag { background: #fef3c7; color: #92400e; }
+.project-card.website .project-lang-tag { background: #d1fae5; color: #065f46; }
+.project-card.android .project-lang-tag { background: #ffedd5; color: #9a3412; }
+.project-card.ios .project-lang-tag { background: #ede9fe; color: #5b21b6; }
+
+.project-name {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+  opacity: 0.5;
+}
+
+.project-card.api .project-name { color: white; }
+
+.project-title {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.project-card.api .project-title { color: white; }
+
+.project-desc {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.project-card.api .project-desc { color: rgba(255,255,255,0.55); }
+.project-card:not(.api) .project-desc { color: var(--ink-3); }
+
+.project-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.feature-pill {
+  font-family: var(--mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.6rem;
+  border-radius: 100px;
+  border: 1px solid;
+}
+
+.project-card.api .feature-pill {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6);
+}
+
+.project-card.dashboard .feature-pill { background: #fef3c7; border-color: #fde68a; color: #78350f; }
+.project-card.website .feature-pill { background: #d1fae5; border-color: #a7f3d0; color: #064e3b; }
+.project-card.android .feature-pill { background: #ffedd5; border-color: #fed7aa; color: #7c2d12; }
+.project-card.ios .feature-pill { background: #ede9fe; border-color: #ddd6fe; color: #4c1d95; }
+
+/* ═══════════════════════════════════════ TECH STACK */
+.stack-bg {
+  background: var(--ink);
+  padding: 6rem 3rem;
+}
+
+.stack-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.stack-section-num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.stack-title {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.stack-title em {
+  font-style: italic;
+  font-family: var(--serif);
+  font-weight: 300;
+  color: var(--accent);
+}
+
+.stack-categories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.stack-category {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r);
+  padding: 1.5rem;
+  transition: background 0.2s;
+}
+
+.stack-category:hover {
+  background: rgba(255,255,255,0.07);
+}
+
+.stack-cat-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.stack-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.stack-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.stack-item-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+
+.stack-item-name {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.stack-item-name strong {
+  color: white;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════ DOMAIN FEATURES */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.feature-cell {
+  background: var(--paper);
+  padding: 2rem;
+  transition: background 0.2s;
+}
+
+.feature-cell:hover {
+  background: var(--paper-2);
+}
+
+.feature-cell-icon {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.feature-cell-title {
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.feature-cell-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* ═══════════════════════════════════════ CREDIT SYSTEM */
+.credit-bg {
+  background: var(--paper-2);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.credit-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: white;
+}
+
+.credit-step {
+  flex: 1;
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  border-right: 1px solid var(--line);
+  position: relative;
+  transition: background 0.2s;
+}
+
+.credit-step:last-child { border-right: none; }
+.credit-step:hover { background: var(--paper); }
+
+.credit-step::after {
+  content: '→';
+  position: absolute;
+  right: -0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  color: var(--muted);
+  z-index: 1;
+  background: white;
+  padding: 0.2rem;
+}
+
+.credit-step:last-child::after { display: none; }
+
+.credit-step-num {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.credit-step-event {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink);
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.credit-step-desc {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════ SERVICES */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.service-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  border-color: var(--accent);
+}
+
+.service-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.service-name {
+  font-family: var(--display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.01em;
+}
+
+.service-role {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════ MOBILE SECTION */
+.mobile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.mobile-card {
+  border-radius: var(--r-lg);
+  padding: 2.5rem;
+  border: 1px solid var(--line);
+}
+
+.mobile-card.android { background: linear-gradient(135deg, #fff7ed, #ffedd5); }
+.mobile-card.ios { background: linear-gradient(135deg, #faf5ff, #ede9fe); }
+
+.mobile-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.mobile-platform-icon {
+  font-size: 2.5rem;
+}
+
+.mobile-platform-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+
+.mobile-card.android .mobile-platform-label { color: #9a3412; }
+.mobile-card.ios .mobile-platform-label { color: #5b21b6; }
+
+.mobile-platform-name {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.mobile-features-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.mobile-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.mobile-feature-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+.mobile-card.android .mobile-feature-check { background: #ffedd5; color: #9a3412; }
+.mobile-card.ios .mobile-feature-check { background: #ede9fe; color: #5b21b6; }
+
+/* ═══════════════════════════════════════ AUTOMATION */
+.automation-bg {
+  background: var(--ink);
+  padding: 6rem 3rem;
+}
+
+.automation-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.automation-section-num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.automation-title {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.automation-title em {
+  font-style: italic;
+  font-family: var(--serif);
+  font-weight: 300;
+  color: var(--accent);
+}
+
+.automation-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.45);
+  max-width: 520px;
+  margin-bottom: 3rem;
+  line-height: 1.7;
+}
+
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.command-cell {
+  background: rgba(255,255,255,0.02);
+  padding: 1.5rem;
+  transition: background 0.2s;
+}
+
+.command-cell:hover { background: rgba(255,255,255,0.05); }
+
+.command-name {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.command-desc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════ EVENTS */
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.events-table thead tr {
+  background: var(--ink);
+}
+
+.events-table thead th {
+  padding: 0.9rem 1.25rem;
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  font-weight: 400;
+}
+
+.events-table tbody tr {
+  border-top: 1px solid var(--line);
+  transition: background 0.15s;
+}
+
+.events-table tbody tr:hover { background: var(--paper-2); }
+
+.events-table td {
+  padding: 0.85rem 1.25rem;
+  font-size: 0.83rem;
+  vertical-align: middle;
+}
+
+.event-name {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.event-trigger {
+  color: var(--muted);
+}
+
+.event-effect {
+  color: var(--teal);
+  font-size: 0.78rem;
+}
+
+/* ═══════════════════════════════════════ REALTIME */
+.realtime-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.realtime-card {
+  border-radius: var(--r-lg);
+  padding: 2rem;
+  border: 1px solid var(--line);
+  background: white;
+}
+
+.realtime-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.realtime-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.realtime-card.pusher .realtime-logo { background: #300d4f; }
+.realtime-card.firebase .realtime-logo { background: #1a73e8; }
+
+.realtime-service-name {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.realtime-service-type {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+.realtime-attrs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.realtime-attr {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.82rem;
+}
+
+.realtime-attr-label {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.realtime-attr-val {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink);
+  text-align: right;
+  max-width: 55%;
+}
+
+/* ═══════════════════════════════════════ FOOTER */
+.footer {
+  background: var(--ink-2);
+  padding: 4rem 3rem;
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.footer-logo {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: white;
+  letter-spacing: -0.02em;
+}
+
+.footer-logo span { color: var(--accent); }
+
+.footer-desc {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.7;
+  max-width: 380px;
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.footer-tag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.08em;
+}
+
+.footer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.06);
+  padding: 0.4rem 0.75rem;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 2rem 0 1.5rem;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.06em;
+}
+
+.footer-langs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.lang-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0;
+}
+
+/* ═══════════════════════════════════════ SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════ RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-nav, .hero-content, .hero-scroll { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .hero-stats { flex-wrap: wrap; }
+  .what-grid, .projects-grid, .mobile-grid, .realtime-grid, .footer-inner { grid-template-columns: 1fr; }
+  .flow-steps { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .flow-steps::before { display: none; }
+  .arch-clients { grid-template-columns: 1fr 1fr; }
+  .arch-services { grid-template-columns: 1fr 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .stack-categories { grid-template-columns: 1fr; }
+  .commands-grid { grid-template-columns: 1fr 1fr; }
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .section, .flow-bg, .stack-bg, .automation-bg { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .footer-meta { align-items: flex-start; }
+  .footer-bottom { flex-direction: column; gap: 1rem; align-items: flex-start; }
+  .credit-flow { flex-direction: column; }
+  .credit-step::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-noise"></div>
+
+  <nav class="hero-nav">
+    <div class="logo">Mark<span>deck</span></div>
+    <div class="nav-tag">Project Overview · 2018–2019</div>
+  </nav>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-dot"></div>
+      <span class="eyebrow-text">Full-Stack · Cross-Platform · Production-Ready</span>
+    </div>
+    <h1 class="hero-title">Freight<br><em>auction</em><br>marketplace</h1>
+    <p class="hero-subtitle">A two-sided logistics platform connecting cargo shippers with carriers through real-time competitive bidding, live route tracking, and automated delivery management.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Subprojects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Languages</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">970</div>
+        <div class="stat-label">PHP Files</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100+</div>
+        <div class="stat-label">API Endpoints</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">12</div>
+        <div class="stat-label">Integrations</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll to explore</span>
+    <div class="scroll-arrow">
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ WHAT IS IT -->
+<div class="divider"></div>
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">01 / Overview</span>
+    <h2 class="section-title">What is<br><em>Markdeck?</em></h2>
+  </div>
+  <div class="what-grid">
+    <div class="what-lead">
+      Markdeck is a <strong>freight transport auction marketplace</strong> built for the Romanian road logistics industry — and designed from day one to scale across the EU.
+    </div>
+    <div class="what-body">
+      <p>Shippers post cargo listings specifying route, dates, cargo category, weight, and requirements. Registered carriers browse listings, place competitive bids, and win contracts based on price and reputation.</p>
+      <p>Once a bid is accepted, the platform manages the entire shipment lifecycle: real-time driver tracking, multi-stop route management, in-transit event reporting, delivery confirmation, automated credit settlement, and post-delivery reviews.</p>
+      <p>The platform targets two distinct user personas — <strong>shippers</strong> (companies or individuals with cargo to move) and <strong>carriers</strong> (truck companies with drivers) — each with their own tailored interface, onboarding flow, and feature set.</p>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════ HOW IT WORKS -->
+<div class="flow-bg">
+  <div class="flow-inner">
+    <div class="flow-section-num reveal">02 / Workflow</div>
+    <h2 class="flow-title reveal">How it <em>works</em></h2>
+    <div class="flow-steps reveal">
+      <div class="flow-step">
+        <div class="flow-icon">📦</div>
+        <div class="flow-step-num">Step 01</div>
+        <div class="flow-step-title">Shipper posts listing</div>
+        <div class="flow-step-desc">Route, dates, cargo type, weight, truck requirements. Up to 7 cargo categories supported.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">🏷️</div>
+        <div class="flow-step-num">Step 02</div>
+        <div class="flow-step-title">Carriers bid</div>
+        <div class="flow-step-desc">Registered carriers spend credits to place competitive price bids. Credits are escrowed on placement.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">✅</div>
+        <div class="flow-step-num">Step 03</div>
+        <div class="flow-step-title">Bid accepted</div>
+        <div class="flow-step-desc">Shipper reviews all bids and accepts the best offer. Other carriers get their credits refunded.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">🚛</div>
+        <div class="flow-step-num">Step 04</div>
+        <div class="flow-step-title">Driver executes route</div>
+        <div class="flow-step-desc">Driver app tracks real-time GPS, manages stops, and reports any delays or incidents along the way.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">⭐</div>
+        <div class="flow-step-num">Step 05</div>
+        <div class="flow-step-title">Delivery & review</div>
+        <div class="flow-step-desc">Delivery confirmed, credits settled, both parties leave reviews. Revenue recorded per truck.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ ARCHITECTURE -->
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">03 / Architecture</span>
+    <h2 class="section-title">Platform<br><em>architecture</em></h2>
+  </div>
+  <div class="arch-diagram">
+    <div class="arch-center">
+      <div class="arch-api-box">
+        <div class="arch-api-label">Core backend</div>
+        <div class="arch-api-name">api.nautilusapp</div>
+        <div class="arch-api-sub">Laravel 5.7 · PHP 7.1+ · REST API · 970 files · 100+ endpoints</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:14%;margin:0.25rem 0;">
+      <div style="width:1px;height:28px;background:var(--line);position:relative;">
+        <div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--line);"></div>
+      </div>
+      <div style="width:1px;height:28px;background:var(--line);position:relative;">
+        <div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--line);"></div>
+      </div>
+      <div style="width:1px;height:28px;background:var(--line);position:relative;">
+        <div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--line);"></div>
+      </div>
+      <div style="width:1px;height:28px;background:var(--line);position:relative;">
+        <div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--line);"></div>
+      </div>
+    </div>
+    <div class="arch-clients">
+      <div class="arch-client js-nuxt">
+        <div class="arch-client-icon">🌐</div>
+        <div class="arch-client-name">Public Website</div>
+        <div class="arch-client-tech">Nuxt.js 2 · SSR · SEO</div>
+      </div>
+      <div class="arch-client js-vue">
+        <div class="arch-client-icon">⚡</div>
+        <div class="arch-client-name">Web Dashboard</div>
+        <div class="arch-client-tech">Vue CLI 3 · Vuex · AWS</div>
+      </div>
+      <div class="arch-client android">
+        <div class="arch-client-icon">🤖</div>
+        <div class="arch-client-name">Android App</div>
+        <div class="arch-client-tech">Java · MVP · SDK 27</div>
+      </div>
+      <div class="arch-client ios">
+        <div class="arch-client-icon">🍎</div>
+        <div class="arch-client-name">iOS App</div>
+        <div class="arch-client-tech">Swift · UIKit · CoreLocation</div>
+      </div>
+    </div>
+    <div class="arch-services">
+      <div class="arch-service">
+        <div class="arch-service-dot" style="background:#e85d24;"></div>
+        <span class="arch-service-name">Pusher — Realtime events</span>
+      </div>
+      <div class="arch-service">
+        <div class="arch-service-dot" style="background:#f0a500;"></div>
+        <span class="arch-service-name">Firebase — Chat & Auth</span>
+      </div>
+      <div class="arch-service">
+        <div class="arch-service-dot" style="background:#0d7d6a;"></div>
+        <span class="arch-service-name">Twilio — SMS verify</span>
+      </div>
+      <div class="arch-service">
+        <div class="arch-service-dot" style="background:#1a5276;"></div>
+        <span class="arch-service-name">OneSignal — Push notifs</span>
+      </div>
+      <div class="arch-service">
+        <div class="arch-service-dot" style="background:#7d3c98;"></div>
+        <span class="arch-service-name">Cloudinary — Media CDN</span>
+      </div>
+      <div class="arch-service">
+        <div class="arch-service-dot" style="background:#c0392b;"></div>
+        <span class="arch-service-name">Google Maps — Routing</span>
+      </div>
+      <div class="arch-service">
+        <div class="arch-service-dot" style="background:#2874a6;"></div>
+        <span class="arch-service-name">AWS S3 + CloudFront</span>
+      </div>
+      <div class="arch-service">
+        <div class="arch-service-dot" style="background:#5d6d7e;"></div>
+        <span class="arch-service-name">Laravel Passport — OAuth2</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SUBPROJECTS -->
+<div class="divider"></div>
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">04 / Subprojects</span>
+    <h2 class="section-title">Five<br><em>subprojects</em></h2>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card api" style="grid-column: 1 / -1;">
+      <div class="project-card-accent"></div>
+      <div class="project-card-header">
+        <div class="project-icon">⚙️</div>
+        <span class="project-lang-tag">PHP · Laravel</span>
+      </div>
+      <div class="project-name">api.nautilusapp</div>
+      <div class="project-title">Backend REST API</div>
+      <div class="project-desc">The platform's spine — 970 PHP files, 100+ endpoints, event-sourced credit ledger, OAuth2 authentication with 6 distinct login flows, spatial MySQL for route geometry, 9 scheduled automation commands, and integrations with 12 third-party services. Every client communicates exclusively through this API.</div>
+      <div class="project-features">
+        <span class="feature-pill">Laravel 5.7</span>
+        <span class="feature-pill">PHP 7.1+</span>
+        <span class="feature-pill">Laravel Passport (OAuth2)</span>
+        <span class="feature-pill">Laravel Horizon (Redis queues)</span>
+        <span class="feature-pill">Laravel Nova (admin panel)</span>
+        <span class="feature-pill">Spatie Event Projector</span>
+        <span class="feature-pill">MySQL Spatial</span>
+        <span class="feature-pill">PHPUnit tests</span>
+        <span class="feature-pill">Docker</span>
+        <span class="feature-pill">Laravel Forge</span>
+      </div>
+    </div>
+
+    <div class="project-card dashboard">
+      <div class="project-card-accent"></div>
+      <div class="project-card-header">
+        <div class="project-icon">⚡</div>
+        <span class="project-lang-tag">Vue.js · SPA</span>
+      </div>
+      <div class="project-name">dashboard.nautilusapp</div>
+      <div class="project-title">Carrier & Shipper Dashboard</div>
+      <div class="project-desc">A fully featured Single Page Application for logged-in users. Handles bid management, fleet operations, real-time chat via Firebase, live auction updates via Pusher, Google Maps route visualization, multi-language UI (EN/FR/RO), and onboarding tours.</div>
+      <div class="project-features">
+        <span class="feature-pill">Vue CLI 3</span>
+        <span class="feature-pill">Vuex</span>
+        <span class="feature-pill">Vue Router</span>
+        <span class="feature-pill">VueFire + Firebase</span>
+        <span class="feature-pill">Laravel Echo + Pusher</span>
+        <span class="feature-pill">vue-i18n</span>
+        <span class="feature-pill">AWS S3 + CloudFront</span>
+      </div>
+    </div>
+
+    <div class="project-card website">
+      <div class="project-card-accent"></div>
+      <div class="project-card-header">
+        <div class="project-icon">🌐</div>
+        <span class="project-lang-tag">Nuxt.js · SSR</span>
+      </div>
+      <div class="project-name">nautilusapp</div>
+      <div class="project-title">Public Marketing Website</div>
+      <div class="project-desc">Server-side rendered public website for unauthenticated visitors. Fully SEO-optimised with Open Graph, auto-generated sitemap, PWA support, and help centre documentation for both shippers and carriers. Deployed via Laravel Forge.</div>
+      <div class="project-features">
+        <span class="feature-pill">Nuxt.js 2 (SSR)</span>
+        <span class="feature-pill">nuxt-i18n</span>
+        <span class="feature-pill">PWA module</span>
+        <span class="feature-pill">Google Tag Manager</span>
+        <span class="feature-pill">Sitemap</span>
+        <span class="feature-pill">GDPR compliant</span>
+      </div>
+    </div>
+
+    <div class="project-card android">
+      <div class="project-card-accent"></div>
+      <div class="project-card-header">
+        <div class="project-icon">🤖</div>
+        <span class="project-lang-tag">Java · Android</span>
+      </div>
+      <div class="project-name">nautilus-android</div>
+      <div class="project-title">Android Driver App</div>
+      <div class="project-desc">Purpose-built for truck drivers. MVP architecture with contract interfaces, a foreground service for continuous location tracking, Google Maps geofencing for delivery triggers, Retrofit with transparent token refresh, and Crashlytics for production monitoring.</div>
+      <div class="project-features">
+        <span class="feature-pill">Java · MVP</span>
+        <span class="feature-pill">Retrofit 2 + OkHttp</span>
+        <span class="feature-pill">FusedLocationProvider</span>
+        <span class="feature-pill">Geofencing</span>
+        <span class="feature-pill">ForegroundService</span>
+        <span class="feature-pill">Crashlytics</span>
+      </div>
+    </div>
+
+    <div class="project-card ios">
+      <div class="project-card-accent"></div>
+      <div class="project-card-header">
+        <div class="project-icon">🍎</div>
+        <span class="project-lang-tag">Swift · UIKit</span>
+      </div>
+      <div class="project-name">nautilus-ios</div>
+      <div class="project-title">iOS Driver App</div>
+      <div class="project-desc">Native Swift UIKit app mirroring the Android driver experience. Features a timer-driven GPS sampling pattern for battery efficiency, Firebase custom auth token integration, CoreLocation background mode, and a custom PrefixPicker with FlagKit integration.</div>
+      <div class="project-features">
+        <span class="feature-pill">Swift 4 · UIKit</span>
+        <span class="feature-pill">CoreLocation</span>
+        <span class="feature-pill">Google Maps SDK</span>
+        <span class="feature-pill">Background location</span>
+        <span class="feature-pill">Crashlytics</span>
+        <span class="feature-pill">CocoaPods</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ DOMAIN FEATURES -->
+<div class="divider"></div>
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">05 / Features</span>
+    <h2 class="section-title">Platform<br><em>capabilities</em></h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-cell">
+      <div class="feature-cell-icon">🏷️</div>
+      <div class="feature-cell-title">Auction bidding engine</div>
+      <div class="feature-cell-desc">Full bid lifecycle: pending → accepted → confirmed → completed. Shippers review bids in real time. Carriers can update, cancel, or be rejected — each action has downstream credit consequences.</div>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-cell-icon">📍</div>
+      <div class="feature-cell-title">Real-time route tracking</div>
+      <div class="feature-cell-desc">Driver location updated every 60 seconds from mobile apps. Multi-stop route legs with ordering, reset, and per-stop delivery confirmation. Geofencing triggers delivery prompts on Android.</div>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-cell-icon">💬</div>
+      <div class="feature-cell-title">In-app Firebase chat</div>
+      <div class="feature-cell-desc">Persistent shipper-carrier messaging per auction via Firebase Realtime Database. Custom auth tokens secure chat rooms per user. Missed-message push notifications bridge chat and mobile.</div>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-cell-icon">🔔</div>
+      <div class="feature-cell-title">Multi-channel notifications</div>
+      <div class="feature-cell-desc">Pusher WebSockets for live web updates. OneSignal for cross-platform mobile push. Twilio SMS for verification codes. Segmented notification management (chat vs. auction) with unread state.</div>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-cell-icon">⚠️</div>
+      <div class="feature-cell-title">In-transit event reporting</div>
+      <div class="feature-cell-desc">Drivers file typed events (delays, incidents, customs, mechanical) with location snapshots, delay durations, and descriptions. Events are visible to shippers in real time on the active auction view.</div>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-cell-icon">⭐</div>
+      <div class="feature-cell-title">Bidirectional review system</div>
+      <div class="feature-cell-desc">Post-delivery reviews for both shippers and carriers. Star ratings with written feedback, response capability, per-user rating summaries, and review moderation via the Nova admin panel.</div>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-cell-icon">🏢</div>
+      <div class="feature-cell-title">Fleet & company management</div>
+      <div class="feature-cell-desc">Carrier companies manage multiple trucks and driver sub-accounts. Truck switch requests between drivers. Per-truck route stats, auction history, and revenue analytics from a dedicated dashboard module.</div>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-cell-icon">🌍</div>
+      <div class="feature-cell-title">Multi-currency & i18n</div>
+      <div class="feature-cell-desc">Live exchange rate sync (hourly), local currency billing, and full UI translations in Romanian, English, and French across both the dashboard and the mobile apps.</div>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-cell-icon">🔒</div>
+      <div class="feature-cell-title">GDPR & compliance</div>
+      <div class="feature-cell-desc">Soft-deletion of accounts, a dedicated Anonymize Artisan command for right-to-erasure requests, email/phone verification flows, and full legal pages (GDPR, privacy, terms, cookies).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ CREDIT SYSTEM -->
+<div class="credit-bg">
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">06 / Business Logic</span>
+    <h2 class="section-title">Event-sourced<br><em>credit ledger</em></h2>
+  </div>
+  <p style="font-size:0.9rem;color:var(--muted);max-width:640px;margin-bottom:2rem;line-height:1.75;">
+    Credits are the platform's internal currency. Carriers purchase credits, spend them to bid, and receive refunds on rejection. Every credit movement is recorded as an immutable domain event — the balance is a projection, fully replayable and auditable.
+  </p>
+  <div class="credit-flow">
+    <div class="credit-step">
+      <div class="credit-step-num">Event 01</div>
+      <div class="credit-step-event">CreditAdded</div>
+      <div class="credit-step-desc">Carrier buys credits via payment gateway</div>
+    </div>
+    <div class="credit-step">
+      <div class="credit-step-num">Event 02</div>
+      <div class="credit-step-event">CreditBlocked</div>
+      <div class="credit-step-desc">Credits escrowed when bid is placed</div>
+    </div>
+    <div class="credit-step">
+      <div class="credit-step-num">Event 03a</div>
+      <div class="credit-step-event">BlockedCreditConsumed</div>
+      <div class="credit-step-desc">Bid accepted — credits deducted</div>
+    </div>
+    <div class="credit-step">
+      <div class="credit-step-num">Event 03b</div>
+      <div class="credit-step-event">BlockedCreditRefunded</div>
+      <div class="credit-step-desc">Bid rejected — credits returned</div>
+    </div>
+    <div class="credit-step">
+      <div class="credit-step-num">Event 04</div>
+      <div class="credit-step-event">TruckRevenueGenerated</div>
+      <div class="credit-step-desc">Delivery confirmed — revenue recorded</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════ DOMAIN EVENTS TABLE -->
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">07 / Event Sourcing</span>
+    <h2 class="section-title">14 domain<br><em>events</em></h2>
+  </div>
+  <table class="events-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Triggered when</th>
+        <th>Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="event-name">CreditAdded</td>
+        <td class="event-trigger">Payment gateway callback confirms purchase</td>
+        <td class="event-effect">Carrier credit balance increases</td>
+      </tr>
+      <tr>
+        <td class="event-name">CreditBlocked</td>
+        <td class="event-trigger">Carrier places a bid on a listing</td>
+        <td class="event-effect">Credits escrowed, available balance decreases</td>
+      </tr>
+      <tr>
+        <td class="event-name">BlockedCreditConsumed</td>
+        <td class="event-trigger">Shipper accepts a bid</td>
+        <td class="event-effect">Escrowed credits permanently deducted</td>
+      </tr>
+      <tr>
+        <td class="event-name">BlockedCreditRefunded</td>
+        <td class="event-trigger">Bid rejected, cancelled, or auction closed</td>
+        <td class="event-effect">Escrowed credits returned to available balance</td>
+      </tr>
+      <tr>
+        <td class="event-name">CreditSpent</td>
+        <td class="event-trigger">Final credit settlement on completion</td>
+        <td class="event-effect">Credits fully deducted from ledger</td>
+      </tr>
+      <tr>
+        <td class="event-name">TruckRevenueGenerated</td>
+        <td class="event-trigger">Delivery confirmed by shipper or auto-confirmed</td>
+        <td class="event-effect">Revenue recorded per truck for analytics</td>
+      </tr>
+      <tr>
+        <td class="event-name">TruckLocationUpdated</td>
+        <td class="event-trigger">Mobile app POSTs GPS coordinates</td>
+        <td class="event-effect">Real-time map position updated</td>
+      </tr>
+      <tr>
+        <td class="event-name">ShipperAdSaved</td>
+        <td class="event-trigger">Listing created or updated</td>
+        <td class="event-effect">Audit record of listing changes</td>
+      </tr>
+      <tr>
+        <td class="event-name">AuctionEventSaved</td>
+        <td class="event-trigger">Driver files an in-transit event</td>
+        <td class="event-effect">Event visible to shipper in real time</td>
+      </tr>
+      <tr>
+        <td class="event-name">AdRouteUpdated</td>
+        <td class="event-trigger">Listing route data changes</td>
+        <td class="event-effect">Spatial geometry updated in MySQL</td>
+      </tr>
+      <tr>
+        <td class="event-name">OnTruckRouteUpdated</td>
+        <td class="event-trigger">Truck route legs reordered or modified</td>
+        <td class="event-effect">Fleet dashboard updates route display</td>
+      </tr>
+      <tr>
+        <td class="event-name">ShipperAdArticlesChanged</td>
+        <td class="event-trigger">Multi-item cargo articles modified</td>
+        <td class="event-effect">Article manifest updated</td>
+      </tr>
+      <tr>
+        <td class="event-name">AccountEmailConfirmed</td>
+        <td class="event-trigger">User clicks email verification link</td>
+        <td class="event-effect">Account activated, full access granted</td>
+      </tr>
+      <tr>
+        <td class="event-name">LocationSaved</td>
+        <td class="event-trigger">Any location entity persisted</td>
+        <td class="event-effect">Location audit trail maintained</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════ TECH STACK -->
+<div class="stack-bg">
+  <div class="stack-inner">
+    <div class="stack-section-num reveal">08 / Tech Stack</div>
+    <h2 class="stack-title reveal">Full technology<br><em>breakdown</em></h2>
+    <div class="stack-categories reveal">
+      <div class="stack-category">
+        <div class="stack-cat-label">Backend</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>PHP 7.1+</strong> · Laravel 5.7</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>MySQL</strong> · Spatial extension</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Redis</strong> · Queue & caching</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Laravel Passport</strong> · OAuth2</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Laravel Horizon</strong> · Queues</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Laravel Nova</strong> · Admin panel</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Spatie Event Projector</strong></span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Spatie Tags</strong> · Cargo tagging</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>grimzy/laravel-mysql-spatial</strong></span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Docker</strong> · Laravel Forge</span></div>
+        </div>
+      </div>
+      <div class="stack-category">
+        <div class="stack-cat-label">Frontend</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Vue.js 2</strong> · Vue CLI 3</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Vuex</strong> · State management</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Vue Router</strong> · Client routing</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Nuxt.js 2</strong> · SSR website</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>SCSS</strong> · Custom design system</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>VueFire</strong> · Firebase binding</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Laravel Echo</strong> · Pusher client</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>VeeValidate 2</strong> · Form validation</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>vue-i18n</strong> · EN/FR/RO</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>AWS S3 + CloudFront</strong></span></div>
+        </div>
+      </div>
+      <div class="stack-category">
+        <div class="stack-cat-label">Mobile</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Java</strong> · Android SDK 27</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>MVP architecture</strong> · Contract pattern</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Retrofit 2</strong> · OkHttp3</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>FusedLocationProvider</strong></span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>GeofencingClient</strong></span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Swift 4</strong> · UIKit</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>CoreLocation</strong> · Background mode</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Google Maps SDK</strong> · iOS + Android</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>Crashlytics</strong> · Fabric</span></div>
+          <div class="stack-item"><div class="stack-item-dot"></div><span class="stack-item-name"><strong>CocoaPods</strong> · Gradle</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ MOBILE DEEP DIVE -->
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">09 / Mobile</span>
+    <h2 class="section-title">Native driver<br><em>apps</em></h2>
+  </div>
+  <div class="mobile-grid">
+    <div class="mobile-card android">
+      <div class="mobile-card-header">
+        <div class="mobile-platform-icon">🤖</div>
+        <div>
+          <div class="mobile-platform-label">Android</div>
+          <div class="mobile-platform-name">nautilus-android</div>
+        </div>
+      </div>
+      <ul class="mobile-features-list">
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>MVP architecture</strong> with contract interfaces — strict separation between Activities (UI) and Presenters (business logic)</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>ForegroundService</strong> with persistent notification keeps GPS tracking alive on long-haul routes, even when phone is locked</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>GeofencingClient</strong> creates proximity fences at delivery waypoints — auto-triggers pickup/delivery confirmation dialogs</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>TokenAuthenticator</strong> (OkHttp) transparently refreshes expired OAuth tokens — drivers never see a login prompt mid-route</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>Custom views</strong>: PhoneNumberSelector with libphonenumber, VerticalDotView for route visualization, SlidingUpPanelLayout</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>Crashlytics + OneSignal</strong> for production crash monitoring and push notification delivery</span>
+        </li>
+      </ul>
+    </div>
+    <div class="mobile-card ios">
+      <div class="mobile-card-header">
+        <div class="mobile-platform-icon">🍎</div>
+        <div>
+          <div class="mobile-platform-label">iOS</div>
+          <div class="mobile-platform-name">nautilus-ios</div>
+        </div>
+      </div>
+      <ul class="mobile-features-list">
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>Timer-driven GPS burst sampling</strong> — starts CLLocationManager, takes one fix, immediately stops. Fires every 60s. Dramatically reduces battery drain on full-day routes</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>LocationManager singleton</strong> broadcasts via NotificationCenter — any screen reacts to location updates without tight coupling</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>Firebase custom auth tokens</strong> from the backend secure per-auction chat rooms — chat is directly bound to Firebase, not proxied through Laravel</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>PrefixTableViewController</strong> with FlagKit — auto-detects country from GPS for phone prefix pre-fill on the login screen</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>Always-on location authorization</strong> with background mode — drivers tracked continuously during active routes</span>
+        </li>
+        <li class="mobile-feature">
+          <span class="mobile-feature-check">✓</span>
+          <span><strong>RepeatingTimer</strong> (GCD DispatchSourceTimer) for precision timing, independent of RunLoop — more reliable than NSTimer for background operations</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ AUTOMATION -->
+<div class="automation-bg">
+  <div class="automation-inner">
+    <div class="automation-section-num reveal">10 / Automation</div>
+    <h2 class="automation-title reveal">9 scheduled<br><em>commands</em></h2>
+    <p class="automation-subtitle reveal">The platform runs autonomously — cron-triggered Artisan commands handle auction expiry, delivery confirmation, subscription management, and more without manual intervention.</p>
+    <div class="commands-grid reveal">
+      <div class="command-cell">
+        <div class="command-name">NautilusCheckExpiredAuctions</div>
+        <div class="command-desc">Sweeps active listings past their expiry date, transitions them to expired, releases all blocked credits to losing bidders.</div>
+      </div>
+      <div class="command-cell">
+        <div class="command-name">NautilusAutoConfirmDeliveries</div>
+        <div class="command-desc">Auto-confirms deliveries after the grace period if the shipper hasn't responded — prevents carriers being held in payment limbo.</div>
+      </div>
+      <div class="command-cell">
+        <div class="command-name">NautilusCheckOverdueAuctions</div>
+        <div class="command-desc">Detects accepted shipments where pickup was missed. Triggers notifications and escalation workflows.</div>
+      </div>
+      <div class="command-cell">
+        <div class="command-name">NautilusGetExchangeRates</div>
+        <div class="command-desc">Fetches live currency exchange rates hourly via florianv/laravel-swap and caches them for multi-currency billing.</div>
+      </div>
+      <div class="command-cell">
+        <div class="command-name">NautilusSuggestAuctions</div>
+        <div class="command-desc">Matches new listings against carriers' saved search profiles. Proactively pushes relevant load notifications to carriers.</div>
+      </div>
+      <div class="command-cell">
+        <div class="command-name">NautilusSubscriptionExpiryNotification</div>
+        <div class="command-desc">Sends advance renewal warnings to carriers before their subscription expires, preventing surprise access loss.</div>
+      </div>
+      <div class="command-cell">
+        <div class="command-name">NautilusCleanIncompleteAds</div>
+        <div class="command-desc">Purges abandoned draft listings that were started during registration but never published.</div>
+      </div>
+      <div class="command-cell">
+        <div class="command-name">NautilusCleanLegs</div>
+        <div class="command-desc">Removes orphaned route legs from cancelled shipments, preventing ghost data in fleet management dashboards.</div>
+      </div>
+      <div class="command-cell">
+        <div class="command-name">Anonymize (GDPR)</div>
+        <div class="command-desc">Anonymises user personal data on erasure request — replaces PII with anonymous values while preserving the transaction audit trail.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ REALTIME -->
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">11 / Realtime</span>
+    <h2 class="section-title">Two realtime<br><em>systems</em></h2>
+  </div>
+  <div class="realtime-grid">
+    <div class="realtime-card pusher">
+      <div class="realtime-card-header">
+        <div class="realtime-logo">📡</div>
+        <div>
+          <div class="realtime-service-name">Pusher</div>
+          <div class="realtime-service-type">WebSocket event broadcasting</div>
+        </div>
+      </div>
+      <div class="realtime-attrs">
+        <div class="realtime-attr"><span class="realtime-attr-label">Purpose</span><span class="realtime-attr-val">Auction events, bid updates, status changes</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Persistence</span><span class="realtime-attr-val">None — fire and forget</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Direction</span><span class="realtime-attr-val">Server → client only</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Auth</span><span class="realtime-attr-val">Laravel Echo + Passport token</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Queue dependency</span><span class="realtime-attr-val">Laravel Horizon (Redis)</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Client library</span><span class="realtime-attr-val">pusher-js + laravel-echo</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Channel types</span><span class="realtime-attr-val">Public, Private, Presence</span></div>
+      </div>
+    </div>
+    <div class="realtime-card firebase">
+      <div class="realtime-card-header">
+        <div class="realtime-logo">🔥</div>
+        <div>
+          <div class="realtime-service-name">Firebase</div>
+          <div class="realtime-service-type">Realtime Database chat</div>
+        </div>
+      </div>
+      <div class="realtime-attrs">
+        <div class="realtime-attr"><span class="realtime-attr-label">Purpose</span><span class="realtime-attr-val">Shipper–carrier messaging per auction</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Persistence</span><span class="realtime-attr-val">Full chat history stored</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Direction</span><span class="realtime-attr-val">Bidirectional (client writes directly)</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Auth</span><span class="realtime-attr-val">Custom token from Laravel API</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Vue binding</span><span class="realtime-attr-val">VueFire reactive arrays</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Client library</span><span class="realtime-attr-val">firebase 5.8.4 + VueFire</span></div>
+        <div class="realtime-attr"><span class="realtime-attr-label">Missed messages</span><span class="realtime-attr-val">OneSignal push via Laravel API</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ THIRD PARTY SERVICES -->
+<div class="divider"></div>
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">12 / Integrations</span>
+    <h2 class="section-title">12 third-party<br><em>integrations</em></h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🗺️</div>
+      <div class="service-name">Google Maps</div>
+      <div class="service-role">Routing, location search, map rendering, geofencing, request cost tracking across all 4 clients</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔥</div>
+      <div class="service-name">Firebase</div>
+      <div class="service-role">Realtime chat database and custom auth token generation for securing per-auction chat rooms</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📡</div>
+      <div class="service-name">Pusher</div>
+      <div class="service-role">WebSocket broadcasting for live bid updates, auction status changes, and route events</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💬</div>
+      <div class="service-name">Twilio</div>
+      <div class="service-role">SMS verification codes for phone confirmation, driver login, and password reset flows</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔔</div>
+      <div class="service-name">OneSignal</div>
+      <div class="service-role">Cross-platform push notifications to Android and iOS driver apps for dispatches and alerts</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📸</div>
+      <div class="service-name">Cloudinary</div>
+      <div class="service-role">Cloud image storage with on-the-fly transformation for truck photos, cargo images, and avatars</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">☁️</div>
+      <div class="service-name">AWS S3 + CloudFront</div>
+      <div class="service-role">Dashboard static file hosting with global CDN delivery and cache invalidation on deploy</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔐</div>
+      <div class="service-name">Laravel Passport</div>
+      <div class="service-role">OAuth2 server with social login via Google and Facebook through Laravel Socialite</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💳</div>
+      <div class="service-name">Payment Gateway</div>
+      <div class="service-role">Hash-based redirect payment flow for credit purchases, with server-side callback verification</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💱</div>
+      <div class="service-name">Exchange Rate API</div>
+      <div class="service-role">Hourly live rate fetching via florianv/laravel-swap for multi-currency billing support</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛡️</div>
+      <div class="service-name">Laravel Nova</div>
+      <div class="service-role">Premium admin panel for operations — auction management, user oversight, review moderation</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <div class="service-name">Crashlytics</div>
+      <div class="service-role">Real-time crash reporting with symbolication for both Android and iOS driver apps in production</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">
+        <div class="footer-logo">Mark<span>deck</span></div>
+      </div>
+      <div class="footer-desc">
+        A production-grade freight transport auction marketplace built across 5 subprojects, 4 programming languages, and 3 platforms — demonstrating full-stack engineering maturity from database to mobile.
+      </div>
+    </div>
+    <div class="footer-meta">
+      <div class="footer-badge">⚙️ &nbsp; Laravel · Vue.js · Swift · Java</div>
+      <div class="footer-badge">📍 &nbsp; Romania · EU-ready</div>
+      <div class="footer-badge">📅 &nbsp; Built 2018–2019</div>
+      <div class="footer-tag" style="margin-top:0.5rem;">Project by Marius Ciobanu</div>
+    </div>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-bottom">
+    <div class="footer-copy">Markdeck · Freight Transport Marketplace · Technical Overview</div>
+    <div class="footer-langs">
+      <div class="lang-dot">PHP</div>
+      <div class="lang-dot">JS</div>
+      <div class="lang-dot">Java</div>
+      <div class="lang-dot">Swift</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(el => {
+    if (el.isIntersecting) {
+      el.target.classList.add('visible');
+      observer.unobserve(el.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Stagger children of grids
+document.querySelectorAll('.flow-steps, .features-grid, .stack-categories, .commands-grid, .services-grid').forEach(grid => {
+  Array.from(grid.children).forEach((child, i) => {
+    child.style.transitionDelay = `${i * 0.06}s`;
+    child.classList.add('reveal');
+    observer.observe(child);
+  });
+});
+</script>
+</body>
+</html>
